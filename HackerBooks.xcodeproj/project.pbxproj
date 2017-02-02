@@ -14,6 +14,8 @@
 		A197343B1E41114600FF80A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A19734391E41114600FF80A8 /* LaunchScreen.storyboard */; };
 		A19734461E425BC500FF80A8 /* Book.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19734451E425BC500FF80A8 /* Book.swift */; };
 		A19734481E43B08400FF80A8 /* AsyncData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19734471E43B08400FF80A8 /* AsyncData.swift */; };
+		A197344A1E43B27100FF80A8 /* JSONProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19734491E43B27100FF80A8 /* JSONProcessing.swift */; };
+		A197344C1E43B38000FF80A8 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = A197344B1E43B38000FF80A8 /* Errors.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +28,8 @@
 		A197343C1E41114600FF80A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A19734451E425BC500FF80A8 /* Book.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Book.swift; sourceTree = "<group>"; };
 		A19734471E43B08400FF80A8 /* AsyncData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncData.swift; sourceTree = "<group>"; };
+		A19734491E43B27100FF80A8 /* JSONProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONProcessing.swift; sourceTree = "<group>"; };
+		A197344B1E43B38000FF80A8 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +94,8 @@
 			children = (
 				A19734451E425BC500FF80A8 /* Book.swift */,
 				A19734471E43B08400FF80A8 /* AsyncData.swift */,
+				A19734491E43B27100FF80A8 /* JSONProcessing.swift */,
+				A197344B1E43B38000FF80A8 /* Errors.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -168,9 +174,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A19734331E41114600FF80A8 /* ViewController.swift in Sources */,
+				A197344C1E43B38000FF80A8 /* Errors.swift in Sources */,
 				A19734311E41114600FF80A8 /* AppDelegate.swift in Sources */,
 				A19734481E43B08400FF80A8 /* AsyncData.swift in Sources */,
 				A19734461E425BC500FF80A8 /* Book.swift in Sources */,
+				A197344A1E43B27100FF80A8 /* JSONProcessing.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
