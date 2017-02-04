@@ -21,6 +21,23 @@ class Book {
     let bookCover : AsyncData
     let bookURL : AsyncData
     var isFavorite : Bool
+    
+    // MARK: - Computed Properties
+    
+    var authorsName: String {
+        get{
+            return authors.sorted().joined(separator: ", ")
+        }
+    }
+    
+    var tagsName: String {
+    
+        get{
+            return tags.sorted().map({$0.name}).joined(separator: ", ")
+        }
+    }
+    
+    
 
     
     
