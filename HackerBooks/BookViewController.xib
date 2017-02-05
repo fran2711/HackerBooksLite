@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="BookViewController" customModule="HackerBooks" customModuleProvider="target">
+            <connections>
+                <outlet property="coverView" destination="cJN-Ja-4Sb" id="orn-7u-WP0"/>
+                <outlet property="makeBookFavorite" destination="Dj8-HF-Ul0" id="jES-rf-QZp"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="M89-Q2-ubj" userLabel="RootStackView">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <subviews>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="cJN-Ja-4Sb">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
+                        </imageView>
+                        <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="c9S-pR-hV3">
+                            <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                            <items>
+                                <barButtonItem title="Read" id="wlD-7A-s8b">
+                                    <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <connections>
+                                        <action selector="readBook:" destination="-1" id="TJH-G4-Lvx"/>
+                                    </connections>
+                                </barButtonItem>
+                                <barButtonItem style="plain" systemItem="flexibleSpace" id="X4h-iJ-0J9"/>
+                                <barButtonItem title="Item" id="Dj8-HF-Ul0"/>
+                            </items>
+                        </toolbar>
+                    </subviews>
+                    <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstItem="cJN-Ja-4Sb" firstAttribute="centerX" secondItem="M89-Q2-ubj" secondAttribute="centerX" id="JaA-Ki-6kJ"/>
+                        <constraint firstAttribute="bottom" secondItem="c9S-pR-hV3" secondAttribute="bottom" id="KHg-pz-hqm"/>
+                        <constraint firstItem="cJN-Ja-4Sb" firstAttribute="top" secondItem="M89-Q2-ubj" secondAttribute="top" id="Tf1-rN-zi2"/>
+                        <constraint firstItem="c9S-pR-hV3" firstAttribute="centerX" secondItem="M89-Q2-ubj" secondAttribute="centerX" id="bJS-Mj-OJV"/>
+                    </constraints>
+                </stackView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="M89-Q2-ubj" secondAttribute="trailing" id="U6l-fd-wkE"/>
+                <constraint firstItem="M89-Q2-ubj" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="aNr-3a-6Co"/>
+                <constraint firstItem="M89-Q2-ubj" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="fu9-of-EWd"/>
+                <constraint firstAttribute="bottom" secondItem="M89-Q2-ubj" secondAttribute="bottom" id="j3a-LV-vm3"/>
+            </constraints>
+            <point key="canvasLocation" x="34.5" y="54.5"/>
+        </view>
+    </objects>
+</document>

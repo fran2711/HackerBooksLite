@@ -10,45 +10,56 @@ import Foundation
 import UIKit
 
 typealias Title = String
-typealias Authors = String
-typealias Tags = String
+typealias Author = String
 
 class Book {
     
     let title : Title
-    let authors : [Authors]
-    let tags : [Tags]
-    let bookCover : AsyncData
-    let bookURL : AsyncData
-    var isFavorite : Bool
+    let authors : [Author]
+    let tags : [Tag]
+    let bookCover : URL
+    let bookURL : URL
+    var isFavorite : Bool = false
     
     // MARK: - Computed Properties
     
-    var authorsName: String {
+    var authorsNames: String {
         get{
-            return authors.sorted().joined(separator: ", ")
+            return authors.sorted().map({$0 as String}).joined(separator: ", ")
         }
     }
     
     var tagsName: String {
     
         get{
-            return tags.sorted().map({$0.name}).joined(separator: ", ")
+            return tags.sorted().map({$0.description}).joined(separator: ", ")
+        }
+    }
+    
+    var favorite: Bool {
+        get{
+            return isFavorite
         }
     }
     
     
 
+    // MARK: - Init
     
-    
-    init(title: Title, authors: [Authors], tags: [Tags], bookCover: AsyncData, bookURL: AsyncData) {
+    init(title: Title, authors: [Author], tags: [Tag], bookCover: URL, bookURL: URL, isFavorite: Bool) {
         
         self.title = title
         self.authors = authors
         self.tags = tags
         self.bookCover = bookCover
         self.bookURL = bookURL
-        self.isFavorite = false
+        self.isFavorite = isFavorite
+    }
+    
+    // MARK: - Utils
+    
+    func favoriteState() {
+        isFavorite = !isFavorite
     }
     
     
@@ -66,14 +77,12 @@ class Book {
 
 // MARK: - Protocols
 
-// Compruebo si hay 2 libros igual
 extension Book: Equatable{
     public static func == (lhs: Book, rhs: Book) -> Bool{
         return (lhs.proxyForEquality() == rhs.proxyForEquality())
     }
 }
 
-// Comparo los libros
 extension Book: Comparable{
     public static func <(lhs: Book, rhs: Book) -> Bool{
         return lhs.proxyForComparision() < rhs.proxyForComparision()
@@ -82,13 +91,20 @@ extension Book: Comparable{
     
 }
 
-extension Book: CustomStringConvertible{
-    public var description: String{
-        get{
-            return "<\(type(of:self)): \(title) -- \(authors)>"
+extension Book: CustomStringConvertible {
+    public var description: String {
+        get {
+            return "<Book title:\(title) authors:\(authors) tags:\(tags) bookCover:\(bookCover.hashValue) bookURL:\(bookURL.hashValue)>"
         }
     }
-    
+}
+
+extension Book: Hashable{
+    public var hashValue: Int {
+        get{
+            return proxyForEquality().hashValue
+        }
+    }
 }
 
 
