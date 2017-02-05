@@ -24,6 +24,7 @@
 		A1A26CC61E47868A005B71D3 /* ic_star_border_3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A1A26CC31E47868A005B71D3 /* ic_star_border_3x.png */; };
 		A1A26CC71E47868A005B71D3 /* ic_star_border.png in Resources */ = {isa = PBXBuildFile; fileRef = A1A26CC41E47868A005B71D3 /* ic_star_border.png */; };
 		A1A26CC91E478AB6005B71D3 /* Books_Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A1A26CC81E478AB6005B71D3 /* Books_Icon.png */; };
+		A1A26CCB1E4794D0005B71D3 /* LibraryTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1A26CCA1E4794D0005B71D3 /* LibraryTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		A1A26CC31E47868A005B71D3 /* ic_star_border_3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_star_border_3x.png; sourceTree = "<group>"; };
 		A1A26CC41E47868A005B71D3 /* ic_star_border.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_star_border.png; sourceTree = "<group>"; };
 		A1A26CC81E478AB6005B71D3 /* Books_Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Books_Icon.png; sourceTree = "<group>"; };
+		A1A26CCA1E4794D0005B71D3 /* LibraryTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +124,7 @@
 			children = (
 				A1A26CB11E475706005B71D3 /* BookViewController.swift */,
 				A1A26CB21E475706005B71D3 /* BookViewController.xib */,
+				A1A26CCA1E4794D0005B71D3 /* LibraryTableViewController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -226,6 +229,7 @@
 				A1A26CB31E475706005B71D3 /* BookViewController.swift in Sources */,
 				A19734501E45E01200FF80A8 /* Library.swift in Sources */,
 				A19734521E45E0C700FF80A8 /* Tag.swift in Sources */,
+				A1A26CCB1E4794D0005B71D3 /* LibraryTableViewController.swift in Sources */,
 				A19734461E425BC500FF80A8 /* Book.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

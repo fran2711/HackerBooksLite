@@ -44,22 +44,78 @@ class BookViewController: UIViewController {
         syncViewWithModel()
     }
     
+       // MARK: - Actions
+    
+    @IBAction func readBook(_ sender: UIBarButtonItem) {
+        
+    }
+    
+    
+    
+    @IBAction func bookMadeFavorite(_ sender: UIBarButtonItem) {
+        model.favoriteState()
+        syncFavorites()
+        delegate?.bookChangedFavoriteState(book: model, isFavorite: model.isFavorite)
+        persistFavoritesState()
+        
+    }
+    
     // MARK: - View Sync
     
     func syncViewWithModel() {
         title = model.title
-        syncCoverData()
+        syncBookCover()
         syncFavorites()
     }
     
     func syncFavorites() {
         makeBookFavorite.image = model.isFavorite ? UIImage(named: "ic_star.png") : UIImage(named: "ic_star_border.png")
     }
-
     
-    @IBAction func readBook(_ sender: UIBarButtonItem) {
+    // MARK: - Favorites
+    
+    func persistFavoritesState() {
+        let userDefaults = UserDefaults.standard
+        userDefaults.set(model.isFavorite, forKey: String(model.hashValue))
     }
-
     
+    // MARK: - AsyncData
+    func syncBookCover() {
+        coverData = AsyncData(url: model.bookCover, defaultData: try! Data(contentsOf: BookViewController.defaultCover))
+        coverData.delegate = self
+        coverView.image = UIImage(data: coverData.data)
+    }
     
 }
+
+// MARK: - Protocols
+
+protocol BookViewControllerDelegate: class {
+    func bookChangedFavoriteState(book: Book, isFavorite: Bool)
+}
+
+
+// MARK: - AsyncData Delegate
+
+extension BookViewController: AsyncDataDelegate {
+    func asyncData(_ sender: AsyncData, didEndLoadingFrom url: URL) {
+        UIView.transition(with: coverView,
+                          duration: 0.3,
+                          options: [.transitionCurlDown],
+                          animations: {
+                            self.coverView.image = UIImage(data: sender.data)},
+                          completion: nil)
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+

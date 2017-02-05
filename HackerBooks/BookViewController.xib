@@ -39,6 +39,9 @@
                                 <barButtonItem style="plain" systemItem="flexibleSpace" id="X4h-iJ-0J9"/>
                                 <barButtonItem image="ic_star_border.png" id="Dj8-HF-Ul0">
                                     <color key="tintColor" red="1" green="0.74341438262487525" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <connections>
+                                        <action selector="bookMadeFavorite:" destination="-1" id="4bB-w2-mad"/>
+                                    </connections>
                                 </barButtonItem>
                             </items>
                         </toolbar>
