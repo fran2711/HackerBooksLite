@@ -31,13 +31,15 @@
                             <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                             <items>
                                 <barButtonItem title="Read" id="wlD-7A-s8b">
-                                    <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                    <color key="tintColor" red="1" green="0.74341438260000003" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                     <connections>
                                         <action selector="readBook:" destination="-1" id="TJH-G4-Lvx"/>
                                     </connections>
                                 </barButtonItem>
                                 <barButtonItem style="plain" systemItem="flexibleSpace" id="X4h-iJ-0J9"/>
-                                <barButtonItem title="Item" id="Dj8-HF-Ul0"/>
+                                <barButtonItem image="ic_star_border.png" id="Dj8-HF-Ul0">
+                                    <color key="tintColor" red="1" green="0.74341438262487525" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </barButtonItem>
                             </items>
                         </toolbar>
                     </subviews>
@@ -60,4 +62,7 @@
             <point key="canvasLocation" x="34.5" y="54.5"/>
         </view>
     </objects>
+    <resources>
+        <image name="ic_star_border.png" width="24" height="24"/>
+    </resources>
 </document>

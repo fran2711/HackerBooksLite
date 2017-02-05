@@ -15,6 +15,11 @@ class BookViewController: UIViewController {
     @IBOutlet weak var makeBookFavorite: UIBarButtonItem!
     @IBOutlet weak var coverView: UIImageView!
     
+    
+    // MARK: - Static Properties
+    
+    private static let defaultCover = Bundle.main.url(forResource: "Books_Icon", withExtension: "png")!
+    
     var model: Book
     fileprivate var coverData: AsyncData
     
@@ -22,7 +27,7 @@ class BookViewController: UIViewController {
     
     init(model: Book){
         self.model = model
-        coverData = AsyncData(url: model.bookCover, defaultData: try? Data(contentsOf: BookViewController.DefaultCover))
+        coverData = AsyncData(url: model.bookCover, defaultData: try! Data(contentsOf: BookViewController.defaultCover))
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -32,8 +37,9 @@ class BookViewController: UIViewController {
     
     // MARK: - View Lifecycle
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func viewWillAppear(_ animated: Bool) {
+        
+        super.viewWillAppear(animated)
         
         syncViewWithModel()
     }
@@ -47,7 +53,7 @@ class BookViewController: UIViewController {
     }
     
     func syncFavorites() {
-        makeBookFavorite.image = model.isFavorite ? UIImage(named: "") : UIImage(named: "")
+        makeBookFavorite.image = model.isFavorite ? UIImage(named: "ic_star.png") : UIImage(named: "ic_star_border.png")
     }
 
     
