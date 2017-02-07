@@ -15,13 +15,16 @@ class BookViewController: UIViewController {
     @IBOutlet weak var makeBookFavorite: UIBarButtonItem!
     @IBOutlet weak var coverView: UIImageView!
     
+    var model: Book
+    fileprivate var coverData: AsyncData
+    weak var delegate: BookViewControllerDelegate? = nil
+
     
     // MARK: - Static Properties
     
     private static let defaultCover = Bundle.main.url(forResource: "Books_Icon", withExtension: "png")!
     
-    var model: Book
-    fileprivate var coverData: AsyncData
+   
     
     // MARK: - Model
     

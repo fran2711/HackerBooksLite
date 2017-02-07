@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11762" systemVersion="16D32" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11757"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PDFViewController" customModule="HackerBooks" customModuleProvider="target">
+            <connections>
+                <outlet property="browser" destination="Bfr-Zo-wSA" id="JAn-XI-OJ8"/>
+                <outlet property="spinner" destination="dFg-tg-W8r" id="6XV-af-muz"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="Cpy-Fa-wK0">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                    <subviews>
+                        <navigationBar contentMode="scaleToFill" horizontalHuggingPriority="1000" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" translatesAutoresizingMaskIntoConstraints="NO" id="R9d-bM-FLJ">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                            <items>
+                                <navigationItem title="Title" id="Uvz-5l-FoX"/>
+                            </items>
+                        </navigationBar>
+                        <webView contentMode="scaleToFill" horizontalHuggingPriority="249" verticalHuggingPriority="249" translatesAutoresizingMaskIntoConstraints="NO" id="Bfr-Zo-wSA">
+                            <rect key="frame" x="0.0" y="44" width="375" height="623"/>
+                            <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </webView>
+                    </subviews>
+                    <constraints>
+                        <constraint firstItem="Bfr-Zo-wSA" firstAttribute="leading" secondItem="Cpy-Fa-wK0" secondAttribute="leading" id="FO4-Ws-tCp"/>
+                        <constraint firstAttribute="trailing" secondItem="Bfr-Zo-wSA" secondAttribute="trailing" id="bkD-ym-oSo"/>
+                    </constraints>
+                </stackView>
+                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="dFg-tg-W8r">
+                    <rect key="frame" x="169" y="314.5" width="37" height="37"/>
+                    <color key="color" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                </activityIndicatorView>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="dFg-tg-W8r" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="8lR-4G-Bic"/>
+                <constraint firstItem="Cpy-Fa-wK0" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="cQw-ik-0WW"/>
+                <constraint firstAttribute="bottom" secondItem="Cpy-Fa-wK0" secondAttribute="bottom" id="h01-Hg-x8y"/>
+                <constraint firstItem="dFg-tg-W8r" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="tRD-tw-R8Y"/>
+                <constraint firstItem="Cpy-Fa-wK0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="y3i-Hq-PgK"/>
+                <constraint firstAttribute="trailing" secondItem="Cpy-Fa-wK0" secondAttribute="trailing" id="zOP-W4-D6h"/>
+            </constraints>
+            <point key="canvasLocation" x="34.5" y="54.5"/>
+        </view>
+    </objects>
+</document>

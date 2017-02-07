@@ -15,7 +15,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        
+        let library = Library(books: downloadBookColleciton())
+        let libraryVC = LibraryTableViewController(model: library)
+        let libraryNC = UINavigationController(rootViewController: libraryVC)
+        
+        let firstBook = fetchInitialBook(library: library)
+        let bookVC = BookViewController(model: firstBook)
+        let bookNC = UINavigationController(rootViewController: bookVC)
+        
+        
+        
+        
         return true
     }
 
