@@ -11,101 +11,199 @@ import UIKit
 
 typealias Title = String
 typealias Author = String
+typealias Authors = [Author]
+typealias PDF = AsyncData
+typealias Cover = AsyncData
 
 class Book {
     
-    let title : Title
-    let authors : [Author]
-    let tags : [Tag]
-    let bookCover : URL
-    let bookURL : URL
-    var isFavorite : Bool = false
+    //MARK: - Attributes
     
-    // MARK: - Computed Properties
+    let _authors: Authors
+    let _title: Title
+    var _tags: Tags
+    let _pdf: PDF
+    let _cover: Cover
     
-    var authorsNames: String {
-        get{
-            return authors.sorted().map({$0 as String}).joined(separator: ", ")
-        }
+    weak var delegate: BookDelegate?
+    
+    var tags: Tags{
+        return _tags
     }
     
-    var tagsName: String {
-    
-        get{
-            return tags.sorted().map({$0.description}).joined(separator: ", ")
-        }
+    var title: Title {
+        return _title
     }
     
-    var favorite: Bool {
-        get{
-            return isFavorite
-        }
-    }
-    
-    
-
-    // MARK: - Init
-    
-    init(title: Title, authors: [Author], tags: [Tag], bookCover: URL, bookURL: URL, isFavorite: Bool) {
+    init(title: Title, authors: Authors, tags: Tags, pdf: PDF, cover: Cover) {
         
-        self.title = title
-        self.authors = authors
-        self.tags = tags
-        self.bookCover = bookCover
-        self.bookURL = bookURL
-        self.isFavorite = isFavorite
+        (_title, _authors, _tags, _pdf, _cover) = (title, authors, tags, pdf, cover)
+    
+        // Set Delegate
+        _cover.delegate = self
+        _pdf.delegate = self
     }
     
-    // MARK: - Utils
-    
-    func favoriteState() {
-        isFavorite = !isFavorite
+    func formattedListOfAuthors() -> String {
+        return _authors.sorted().joined(separator: ", ").capitalized
     }
     
-    
-    // MARK: - Proxies
-    
-    func proxyForEquality() -> String {
-        return "\(title)\(authors)\(tags)\(bookCover)\(bookURL)"
+    func formattedListOfTags() -> String {
+        return _tags.sorted().map{$._name}.joined(separator: ", ").capitalized
     }
     
-    func proxyForComparision() -> String {
-        return proxyForEquality()
-    }
-
 }
+
+
+// MARK: - Favorites
+
+extension Book{
+    
+    private func hasFavoriteTag()-> Bool {
+        return _tags.contains(Tag.favoriteTag())
+    }
+    
+    private func addFavoriteTag(){
+        _tags.insert(Tag.favoriteTag())
+    }
+    
+    private func removeFavoriteTag() {
+        _tags.remove(Tag.favoriteTag())
+    }
+    
+    var isFavorite: Bool {
+        get{
+            return hasFavoriteTag()
+        }
+        set {
+            if newValue == true {
+                addFavoriteTag()
+                sendNotification(name: BookDidChange)
+            }else{
+                removeFavoriteTag()
+                sendNotification(name: BookDidChange)
+            }
+        }
+    }
+}
+
+
 
 // MARK: - Protocols
-
-extension Book: Equatable{
-    public static func == (lhs: Book, rhs: Book) -> Bool{
-        return (lhs.proxyForEquality() == rhs.proxyForEquality())
-    }
-}
-
-extension Book: Comparable{
-    public static func <(lhs: Book, rhs: Book) -> Bool{
-        return lhs.proxyForComparision() < rhs.proxyForComparision()
+extension Book: Hashable {
+    var proxyForHasing: String {
+        return "\(_title)\(_authors)"
     }
     
+    var hashValue: Int {
+        return proxyForHasing.hashValue
+    }
+}
+
+
+
+extension Book: Equatable {
+    var proxyForComparision: String {
+        
+        return "\(isFavorite ? "A" : "Z")\(_title)\(formattedListOfAuthors())"
+    }
+    
+    static func == (lhs: Book, rhs: Book) -> Bool {
+        return lhs.proxyForComparision == rhs.proxyForComparision
+    }
     
 }
 
-extension Book: CustomStringConvertible {
-    public var description: String {
-        get {
-            return "<Book title:\(title) authors:\(authors) tags:\(tags) bookCover:\(bookCover.hashValue) bookURL:\(bookURL.hashValue)>"
-        }
+extension Book: Comparable {
+    static func < (lhs: Book, rhs: Book) -> Bool {
+        return lhs.proxyForComparision < rhs.proxyForComparision
     }
 }
 
-extension Book: Hashable{
-    public var hashValue: Int {
-        get{
-            return proxyForEquality().hashValue
-        }
+// MARK: - Comunication - Delegate
+protocol BookDelegate: class {
+    func bookDidChange(sender: Book)
+    func bookCoverImageDidDownload(sender: Book)
+    func bookPDFDidDownload(sender: Book)
+}
+
+extension BookDelegate{
+    func bookDidChange(sender: Book){}
+    func bookCoverImageDidDownload(sender: Book){}
+    func bookPDFDidDownload(sender: Book){}
+}
+
+let BookDidChange = Notification.Name(rawValue: "com.franlucenadejuan.BookDidChange")
+let BookKey = "com.franlucenadejuan.BookKey"
+
+let BookCoverImageDidDownload = Notification.Name(rawValue: "com.franlucenadejuan.BookCoverImageDidDownload")
+let BookPDFDidDownload = Notification.Name(rawValue: "com.franlucenadejuan.BookPDFDidDownload")
+
+extension Book {
+    
+    func sendNotification(name: Notification.Name) {
+        let notification = Notification(name: name, object: self, userInfo: [BookKey: self])
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.post(notification)
     }
 }
+
+
+// MARK: - AsyncDataDelegate
+
+extension Book: AsyncDataDelegate {
+    func asyncData(_ sender: AsyncData, didEndLoadingFrom url: URL) {
+
+        let notificationName: Notification.Name
+        
+        switch sender {
+        case _cover:
+            notificationName = BookCoverImageDidDownload
+            delegate?.bookCoverImageDidDownload(sender: self)
+            
+        case _pdf:
+            notificationName = BookPDFDidDownload
+            delegate?.bookPDFDidDownload(sender: self)
+            
+        default:
+            fatalError("Fatal Error")
+        }
+        
+        sendNotification(name: notificationName)
+    }
+    
+    func asyncData(_ sender: AsyncData, shouldStartLoadingFrom url: URL) -> Bool {
+        return true
+    }
+    
+    func asyncData(_ sender: AsyncData, willStartLoadingFrom url: URL) {
+        print("Loading from \(url)")
+    }
+    
+    func asyncData(_ sender: AsyncData, didFailLoadingFrom url: URL, error: NSError) {
+        print("Error loading from \(url)")
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

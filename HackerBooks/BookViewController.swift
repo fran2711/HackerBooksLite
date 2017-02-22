@@ -30,7 +30,7 @@ class BookViewController: UIViewController {
     
     init(model: Book){
         self.model = model
-        coverData = AsyncData(url: model.bookCover, defaultData: try! Data(contentsOf: BookViewController.defaultCover))
+        coverData = AsyncData(url: model.coverImageUrl, defaultData: try! Data(contentsOf: BookViewController.defaultCover))
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -51,12 +51,16 @@ class BookViewController: UIViewController {
     
     @IBAction func readBook(_ sender: UIBarButtonItem) {
         
+        let pdfVC = PDFViewController(pdfURL: model.pdfUrl)
+        navigationController?.pushViewController(pdfVC, animated: true)
+        
+        
     }
     
     
     
     @IBAction func bookMadeFavorite(_ sender: UIBarButtonItem) {
-        model.favoriteState()
+        model.toggleFavoriteState()
         syncFavorites()
         delegate?.bookChangedFavoriteState(book: model, isFavorite: model.isFavorite)
         persistFavoritesState()
@@ -84,7 +88,7 @@ class BookViewController: UIViewController {
     
     // MARK: - AsyncData
     func syncBookCover() {
-        coverData = AsyncData(url: model.bookCover, defaultData: try! Data(contentsOf: BookViewController.defaultCover))
+        coverData = AsyncData(url: model.coverImageUrl, defaultData: try! Data(contentsOf: BookViewController.defaultCover))
         coverData.delegate = self
         coverView.image = UIImage(data: coverData.data)
     }

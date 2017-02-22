@@ -80,10 +80,10 @@ class LibraryTableViewController: UITableViewController {
         let book = model.book(forTag: tag(inSection: indexPath.section), at: indexPath.row)
         let cell: BookViewCell = tableView.dequeueReusableCell(withIdentifier: BookViewCell.cellId) as? BookViewCell ?? BookViewCell()
         
-        cell.setCoverData(data: AsyncData(url: (book?.bookCover)!, defaultData: defaultBookCoverData))
+        cell.setCoverData(data: AsyncData(url: (book?.coverImageUrl)!, defaultData: defaultBookCoverData))
         cell.bookTitle?.text = book?.title
-        cell.bookAuthors?.text = book?.authorsNames
-        cell.bookTags?.text = book?.tagsName
+        cell.bookAuthors?.text = book?.authorsDescription
+        cell.bookTags?.text = book?.tagsDescription
        
         return cell
     }

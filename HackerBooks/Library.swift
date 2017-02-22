@@ -8,82 +8,154 @@
 
 import Foundation
 
+typealias Books = MultiDictionary<Tag, Book>
 
-class Library  {
+class Library {
     
     //MARK: - Properties
-    
-    var books = MultiDictionary<Tag, Book>()
-    
-    
-    //MARK: - Computed Properties
-    
-    var bookCount: Int {
-        get {
-            return books.countUnique
-        }
-    }
-    
-    var tags: [Tag] {
-        get {
-            var tags: [Tag] = []
-            for tag in books.keys.sorted() {
-                tags.append(tag)
-            }
-            return tags
-        }
-    }
-    
-    var tagCount: Int {
-        get {
-            return books.keys.count
-        }
-    }
+
+    var _books : Books
+    var _bookObserver : NSObjectProtocol?
     
     
     //MARK: - Initialization
     
     init(books: [Book]) {
-        for book in books {
-            if book.isFavorite {
-                addBookToFavorites(book)
-            }
+    
+        _books = Books()
+        
+        loadBooks(bookList: books)
+        setupNotifications()
+        
+    }
+    
+    deinit {
+        tearDownNotifications()
+    }
+    
+    private func loadBooks(bookList: [Book]){
+        
+        for book in bookList{
             for tag in book.tags {
-                self.books.insert(value: book, forKey: tag)
+                _books.insert(value: book, forKey: tag)
             }
         }
     }
     
+    // MARK: - Accessors
+    
+    var bookCount: Int {
+        get{
+            return _books.countUnique
+        }
+    }
     
     //MARK: - Data Retrieval
     
-    func books(forTag tag: Tag) -> [Book]? {
-        if let bookCollection = books[tag] {
-            return Array(bookCollection).sorted()
-        } else {
-            return nil
+    func bookCount(forTagName name: TagName) -> Int {
+        let tag = Tag(name: name)
+        
+        if let bucket = _books[tag] {
+            return bucket.count
+        }else{
+            return 0
         }
     }
     
-    func bookCount(forTag tag: Tag) -> Int {
-        return books(forTag: tag)?.count ?? 0
-    }
     
-    func book(forTag tag: Tag, at: Int) -> Book? {
-        if let bookCollection = books(forTag: tag) {
-            return bookCollection[at]
-        } else {
+    func books(forTagName name: TagName) -> [Book]? {
+        guard let books = _books[Tag(name:name)]else {
             return nil
+        }
+        
+        if books.count == 0 {
+            return nil
+        }else{
+            return books.sorted()
         }
     }
     
-    //MARK: - Favorites
     
-    func addBookToFavorites(_ book: Book) {
-        books.insert(value: book, forKey: Tag.favorites)
+    
+    func book(forTagName name: TagName, at: Int) -> Book? {
+        guard let books = _books[Tag(name: name)] else {
+            return nil
+        }
+        
+        guard !(books.count > 0 && at > books.count) else {
+            return nil
+        }
+        
+        return books.sorted()[at]
     }
     
-    func removeBookFromFavorites(_ book: Book) {
-        books.remove(value: book, fromKey: Tag.favorites)
+
+    var tags: [Tag]{
+        get{
+            return _books.keys.sorted()
+        }
     }
+
 }
+    
+// MARK: - Notifications
+
+extension Library{
+    
+    
+    func setupNotifications() {
+        let notificationCenter = NotificationCenter.default
+        
+        _bookObserver = notificationCenter.addObserver(forName: BookDidChange, object: nil, queue: nil){
+
+            (n: Notification) in
+            
+            let book = n.userInfo![BookKey] as! Book
+            let fav = Tag.favoriteTag()
+            
+            if book.isFavorite{
+                self._books.insert(value: book, forKey: fav)
+            }else{
+                self._books.remove(value: book, fromKey: fav)
+            }
+            
+        }
+    }
+    
+    func tearDownNotifications() {
+        guard let observer = _bookObserver else{
+            return
+        }
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.removeObserver(observer)
+        
+    }
+    
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

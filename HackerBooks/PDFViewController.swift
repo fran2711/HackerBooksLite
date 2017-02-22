@@ -98,7 +98,7 @@ extension PDFViewController {
     
     func bookDidChange(_ notification: Notification) {
         let newBook = notification.userInfo?[LibraryTableViewController.BookKey] as! Book
-        syncPDFData(pdfURL: newBook.bookURL)
+        syncPDFData(pdfURL: newBook.pdfUrl)
         
     }
 }
