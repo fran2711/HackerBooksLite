@@ -94,7 +94,7 @@ class BookViewController: UIViewController {
 }
 
 extension BookViewController: LibraryTableViewControllerDelegate{
-    func libraryTableViewController(_ sender: LibraryTableViewController, didSelectBook book: Book) {
+    func libraryTableViewController(_sender sender: LibraryTableViewController, didSelect book: Book) {
         stopObserving(book: _model)
         _model = book
         startObserving(book: book)

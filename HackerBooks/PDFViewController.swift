@@ -38,7 +38,7 @@ class PDFViewController: UIViewController {
         super.viewDidLoad()
         
         setupNotifications()
-        browser.load((_model?._pdf.data)!, mimeType: "application/pdf", textEncodingName: "utf8", baseURL: URL(string: "http://www.google.com"))
+        browser.load((_model?._pdf.data)!, mimeType: "application/pdf", textEncodingName: "utf8", baseURL: URL(string: "http://www.google.com")!)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

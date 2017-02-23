@@ -50,7 +50,7 @@ class LibraryTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupNotifications()
+        setupNotification()
     }
     
     deinit {
@@ -59,7 +59,7 @@ class LibraryTableViewController: UITableViewController {
     
     // MARK: - Cell Registration
     private func registerNib(){
-        let nib = UINib(nibName: "BookTableViewCell", bundle: Bundle.main)
+        let nib = UINib(nibName: "BookViewCell", bundle: Bundle.main)
         tableView.register(nib, forCellReuseIdentifier: BookViewCell.cellId)
     }
     
@@ -96,7 +96,7 @@ class LibraryTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: BookViewCell.cellId, for: indexPath) as! BookViewCell
         
         // Sincronizo modelo con la vista
-        cell.startObserving(book: book)
+        cell.startObserving(book: book!)
         
         return cell
     }
@@ -114,7 +114,7 @@ class LibraryTableViewController: UITableViewController {
         let book = _model.book(forTagName: tag._name, at: indexPath.row)
         
         // Creo el ViewController
-        let bookVC = BookViewController(model: book)
+        let bookVC = BookViewController(model: book!)
         
         // Lo cargo
         navigationController?.pushViewController(bookVC, animated: true)

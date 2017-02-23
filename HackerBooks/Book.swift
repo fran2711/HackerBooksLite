@@ -49,7 +49,7 @@ class Book {
     }
     
     func formattedListOfTags() -> String {
-        return _tags.sorted().map{$._name}.joined(separator: ", ").capitalized
+        return _tags.sorted().map{$0._name}.joined(separator: ", ").capitalized
     }
     
 }

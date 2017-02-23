@@ -13,7 +13,7 @@ class BookViewCell: UITableViewCell {
     // MARK: - Cell Properties
     
     static let cellId = "BookCellViewId"
-    static let cellHeight: CGFloat = 95.0
+    static let cellHeight: CGFloat = 108.0
     
     // MARK: - Outlets
     
@@ -25,7 +25,7 @@ class BookViewCell: UITableViewCell {
     private var _book: Book?
     
     private let _nc = NotificationCenter.default
-    private var _bookObserver: NSObjectProtcol?
+    private var _bookObserver: NSObjectProtocol?
     
     func startObserving(book: Book) {
         _book = book

@@ -12,7 +12,6 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PDFViewController" customModule="HackerBooks" customModuleProvider="target">
             <connections>
                 <outlet property="browser" destination="Bfr-Zo-wSA" id="JAn-XI-OJ8"/>
-                <outlet property="spinner" destination="dFg-tg-W8r" id="6XV-af-muz"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -40,17 +39,11 @@
                         <constraint firstAttribute="trailing" secondItem="Bfr-Zo-wSA" secondAttribute="trailing" id="bkD-ym-oSo"/>
                     </constraints>
                 </stackView>
-                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="dFg-tg-W8r">
-                    <rect key="frame" x="169" y="314.5" width="37" height="37"/>
-                    <color key="color" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                </activityIndicatorView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
-                <constraint firstItem="dFg-tg-W8r" firstAttribute="centerY" secondItem="i5M-Pr-FkT" secondAttribute="centerY" id="8lR-4G-Bic"/>
                 <constraint firstItem="Cpy-Fa-wK0" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="cQw-ik-0WW"/>
                 <constraint firstAttribute="bottom" secondItem="Cpy-Fa-wK0" secondAttribute="bottom" id="h01-Hg-x8y"/>
-                <constraint firstItem="dFg-tg-W8r" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="tRD-tw-R8Y"/>
                 <constraint firstItem="Cpy-Fa-wK0" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="y3i-Hq-PgK"/>
                 <constraint firstAttribute="trailing" secondItem="Cpy-Fa-wK0" secondAttribute="trailing" id="zOP-W4-D6h"/>
             </constraints>
