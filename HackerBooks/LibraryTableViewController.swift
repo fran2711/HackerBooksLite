@@ -48,116 +48,116 @@ class LibraryTableViewController: UITableViewController {
         registerNib()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNotifications()
+    }
     
+    deinit {
+        tearDownNotifications()
+    }
     
-
+    // MARK: - Cell Registration
+    private func registerNib(){
+        let nib = UINib(nibName: "BookTableViewCell", bundle: Bundle.main)
+        tableView.register(nib, forCellReuseIdentifier: BookViewCell.cellId)
+    }
+    
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return model.tagCount
-    }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return model.bookCount(forTag: tag(inSection: section))
+        return _model.tags.count
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        let tagContent = tag(inSection: section).description
-        return tagContent.capitalized
+        return _model.tags[section]._name
     }
     
+
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let tagName = _model.tags[section]._name
+        
+        guard let books = _model.books(forTagName: tagName) else {
+            fatalError("No books for tag: \(tagName)")
+        }
+        
+        return books.count
+    }
     
-    
-    
-    
-    
+    // MARK: - Cell Configuration
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let book = model.book(forTag: tag(inSection: indexPath.section), at: indexPath.row)
-        let cell: BookViewCell = tableView.dequeueReusableCell(withIdentifier: BookViewCell.cellId) as? BookViewCell ?? BookViewCell()
+        // Encuentro el libro
+        let tag = _model.tags[indexPath.section]
+        let book = _model.book(forTagName: tag._name, at: indexPath.row)
         
-        cell.setCoverData(data: AsyncData(url: (book?.coverImageUrl)!, defaultData: defaultBookCoverData))
-        cell.bookTitle?.text = book?.title
-        cell.bookAuthors?.text = book?.authorsDescription
-        cell.bookTags?.text = book?.tagsDescription
-       
+        // Creo la celda
+        let cell = tableView.dequeueReusableCell(withIdentifier: BookViewCell.cellId, for: indexPath) as! BookViewCell
+        
+        // Sincronizo modelo con la vista
+        cell.startObserving(book: book)
+        
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let selectedBook = model.book(forTag: tag(inSection: indexPath.section), at: indexPath.row) else {
-            return
-        }
-        
-        delegate?.libraryTableViewController(self, didSelectBook: selectedBook)
-        
-    }
-
-
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return BookViewCell.cellHeight
     }
-
     
     
-    //MARK: - Utils
     
-    func tag(inSection section: Int) -> Tag {
-        return model.tags[section]
-    }
-
-}
-
-
-// MARK: - Protocols
-
-protocol LibraryTableViewControllerDelegate: class {
-    func libraryTableViewController(_ sender: LibraryTableViewController, didSelectBook book: Book)
-}
-
-
-// // MARK: - LibraryTableViewControllerDelegate
-
-extension LibraryTableViewController: LibraryTableViewControllerDelegate {
-    func libraryTableViewController(_ sender: LibraryTableViewController, didSelectBook book: Book) {
-        let  bookController = BookViewController(model: book)
-        bookController.delegate = self
-        navigationController?.pushViewController(bookController, animated: true)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        // Recojo el libro
+        let tag = _model.tags[indexPath.section]
+        let book = _model.book(forTagName: tag._name, at: indexPath.row)
+        
+        // Creo el ViewController
+        let bookVC = BookViewController(model: book)
+        
+        // Lo cargo
+        navigationController?.pushViewController(bookVC, animated: true)
     }
-}
 
-// MARK: - BookViewControllerDelegate
+    
+    override func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! BookViewCell
+        cell.stopObserving()
+    }
 
-extension LibraryTableViewController: BookViewControllerDelegate {
-    func bookChangedFavoriteState(book: Book, isFavorite: Bool){
-        if (isFavorite) {
-            model.addBookToFavorites(book)
-        } else {
-            model.removeBookFromFavorites(book)
+    
+
+    // MARK: - Notifications
+    var bookObserver: NSObjectProtocol?
+    
+    func setupNotification() {
+        let nCenter = NotificationCenter.default
+        bookObserver = nCenter.addObserver(forName: BookDidChange, object: nil, queue: nil, using: { (n: Notification) in
+            self.tableView.reloadData()
+        })
+    }
+    
+    
+    func tearDownNotifications(){
+        guard let observer = bookObserver else {
+            return
         }
-        
-        self.tableView.reloadData()
-        
+        let nCenter = NotificationCenter.default
+        nCenter.removeObserver(observer)
     }
 }
 
-
-//MARK: - Notifications
-
-extension LibraryTableViewController {
-    
-    static let NotificationName = Notification.Name(rawValue: "LibraryTableViewControllerBookDidChange")
-    static let BookKey = "LibraryTableViewControllerBookKey"
-    
-    func notify(bookDidChange book: Book) {
-        let notificationCenter = NotificationCenter.default
-        let notification = Notification(name: LibraryTableViewController.NotificationName, object: self, userInfo: [LibraryTableViewController.BookKey : book])
-        
-        notificationCenter.post(notification)
-    }
+// MARK: - Delegate Protocol
+protocol LibraryTableViewControllerDelegate {
+    func libraryTableViewController(_sender: LibraryTableViewController, didSelect selectedBook: Book)
 }
+    
+
+
+
+
+
 
 
 

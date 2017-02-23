@@ -10,28 +10,22 @@ import UIKit
 
 class PDFViewController: UIViewController {
     
-    //MARK: - Class Properties
-    
-    static let PdfMimetype: String = "application/pdf"
-    static let DefaultPdfUrl: URL = Bundle.main.url(forResource: "default_pdf", withExtension: "pdf")!
-    
-    
-    //MARK: - Properties
-    
-    var pdfData: AsyncData
+    var _model: Book?
+    var _bookObserver: NSObjectProtocol?
     
     @IBOutlet weak var browser: UIWebView!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
     
     
+    
     // MARK: - Init
     
-    init(pdfURL: URL) {
-        pdfData = AsyncData(url: pdfURL, defaultData: try! Data(contentsOf: PDFViewController.DefaultPdfUrl))
+    init(model: Book) {
+        _model = model
         super.init(nibName: nil, bundle: nil)
-        
-        pdfData.delegate = self
+        title = _model?.title
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -40,68 +34,48 @@ class PDFViewController: UIViewController {
 
     // MARK: - View Lifecycle
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         
+        setupNotifications()
+        browser.load((_model?._pdf.data)!, mimeType: "application/pdf", textEncodingName: "utf8", baseURL: URL(string: "http://www.google.com"))
     }
     
-    
-    // MARK: - Request Handling
-    
-    func requestPDF() {
-        browser.load(pdfData.data, mimeType: PDFViewController.PdfMimetype, textEncodingName: "", baseURL: Bundle.main.bundleURL)
-    }
-    
-    // // MARK: - Spinner
-    
-    func startSpinner() {
-        spinner.isHidden = false
-        spinner.startAnimating()
-    }
-    
-    func stopSpinner() {
-        spinner.isHidden = true
-        spinner.stopAnimating()
-    }
-    
-    
-    // MARK: - AsyncData
-    
-    func syncPDFData(pdfURL: URL)  {
-        pdfData = AsyncData(url: pdfURL, defaultData: try! Data(contentsOf: PDFViewController.DefaultPdfUrl))
-        pdfData.delegate = self
-        requestPDF()
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tearDownNotifications()
     }
 }
 
-// MARK: - AsyncData Delegate
-
-extension PDFViewController: AsyncDataDelegate {
-    func asyncData(_ sender: AsyncData, didEndLoadingFrom url: URL) {
-        requestPDF()
-        stopSpinner()
-    }
-}
 
 // MARK: - Notifications
-
-extension PDFViewController {
-    func subscribe() {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.addObserver(forName: LibraryTableViewController.NotificationName, object: nil, queue: OperationQueue.main, using: {self.bookDidChange( $0 )})
-    }
-    
-    func unsubscribe() {
-        let notificationCenter = NotificationCenter.default
-        notificationCenter.removeObserver(self)
-    }
-    
-    func bookDidChange(_ notification: Notification) {
-        let newBook = notification.userInfo?[LibraryTableViewController.BookKey] as! Book
-        syncPDFData(pdfURL: newBook.pdfUrl)
-        
+extension PDFViewController{
+    func setupNotifications(){
+        let nCenter = NotificationCenter.default
+        _bookObserver = nCenter.addObserver(forName: BookPDFDidDownload, object: _model, queue: nil) { (n: Notification) in
+            self.browser.load((self._model?._pdf.data), mimeType: "application/pdf", textEncodingName: "utf8", baseURL: <#T##URL#>)
+        })
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
