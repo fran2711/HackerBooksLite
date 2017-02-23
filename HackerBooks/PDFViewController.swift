@@ -53,8 +53,19 @@ extension PDFViewController{
     func setupNotifications(){
         let nCenter = NotificationCenter.default
         _bookObserver = nCenter.addObserver(forName: BookPDFDidDownload, object: _model, queue: nil) { (n: Notification) in
-            self.browser.load((self._model?._pdf.data), mimeType: "application/pdf", textEncodingName: "utf8", baseURL: <#T##URL#>)
-        })
+            self.browser.load((self._model?._pdf.data)!, mimeType: "application/pdf", textEncodingName: "utf8", baseURL: URL(string: "http://www.google.com")!)
+        }
+    }
+    
+    func tearDownNotifications(){
+        guard let observer = _bookObserver else {
+            return
+        }
+        
+        let nCenter = NotificationCenter.default
+        nCenter.removeObserver(observer)
+        _bookObserver = nil
+        
     }
 }
 
