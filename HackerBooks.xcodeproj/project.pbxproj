@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A12BF3A61E5E0D6F005C810D /* JSONProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12BF3A51E5E0D6F005C810D /* JSONProcessing.swift */; };
+		A12BF3A81E5E165C005C810D /* Controllers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A12BF3A71E5E165C005C810D /* Controllers.swift */; };
 		A19734311E41114600FF80A8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A19734301E41114600FF80A8 /* AppDelegate.swift */; };
 		A19734381E41114600FF80A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A19734371E41114600FF80A8 /* Assets.xcassets */; };
 		A197343B1E41114600FF80A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A19734391E41114600FF80A8 /* LaunchScreen.storyboard */; };
@@ -34,6 +36,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A12BF3A51E5E0D6F005C810D /* JSONProcessing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JSONProcessing.swift; sourceTree = "<group>"; };
+		A12BF3A71E5E165C005C810D /* Controllers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Controllers.swift; sourceTree = "<group>"; };
 		A197342D1E41114600FF80A8 /* HackerBooks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = HackerBooks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A19734301E41114600FF80A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A19734371E41114600FF80A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -128,6 +132,7 @@
 				A19734451E425BC500FF80A8 /* Book.swift */,
 				A197344F1E45E01200FF80A8 /* Library.swift */,
 				A19734511E45E0C700FF80A8 /* Tags.swift */,
+				A12BF3A51E5E0D6F005C810D /* JSONProcessing.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -135,6 +140,7 @@
 		A1A26CB01E474C59005B71D3 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				A12BF3A71E5E165C005C810D /* Controllers.swift */,
 				A1A26CB11E475706005B71D3 /* BookViewController.swift */,
 				A1A26CB21E475706005B71D3 /* BookViewController.xib */,
 				A1A26CCA1E4794D0005B71D3 /* LibraryTableViewController.swift */,
@@ -254,11 +260,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				A19734311E41114600FF80A8 /* AppDelegate.swift in Sources */,
+				A12BF3A61E5E0D6F005C810D /* JSONProcessing.swift in Sources */,
 				A19734481E43B08400FF80A8 /* AsyncData.swift in Sources */,
 				A197344E1E45D0FB00FF80A8 /* MultiDictionary.swift in Sources */,
 				A1A26CCF1E479536005B71D3 /* BookViewCell.swift in Sources */,
 				A1A26CB31E475706005B71D3 /* BookViewController.swift in Sources */,
 				A1A26CD31E4A4FBB005B71D3 /* PDFViewController.swift in Sources */,
+				A12BF3A81E5E165C005C810D /* Controllers.swift in Sources */,
 				A19734501E45E01200FF80A8 /* Library.swift in Sources */,
 				A19734521E45E0C700FF80A8 /* Tags.swift in Sources */,
 				A1A26CCB1E4794D0005B71D3 /* LibraryTableViewController.swift in Sources */,

@@ -12,8 +12,10 @@ class LibraryTableViewController: UITableViewController {
     
     // MARK: - Properties
     
-    var model: Library
-    var delegate: LibraryTableViewControllerDelegate? = nil
+    private let _model: Library
+    var delegate: LibraryTableViewControllerDelegate?
+    
+    
     
     // MARK: - Computed Properties
     
@@ -28,31 +30,26 @@ class LibraryTableViewController: UITableViewController {
     
     // MARK: - Init
     
-    init(model: Library){
-        self.model = model
+    init(model: Library, style: UITableViewStyle = .plain){
+        _model = model
         super.init(nibName: nil, bundle: nil)
+        title = "HackerBooks"
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
     // MARK: - View Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = "Hacker Books"
-        let bookCell = UINib(nibName: "BookViewCeel", bundle: nil)
-        tableView.register(bookCell, forCellReuseIdentifier: BookViewCell.cellId)
-        
+        registerNib()
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+    
+    
+    
 
     // MARK: - Table view data source
 

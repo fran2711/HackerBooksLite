@@ -10,47 +10,71 @@ import UIKit
 
 class BookViewCell: UITableViewCell {
     
-    // MARK: - Properties
+    // MARK: - Cell Properties
+    
+    static let cellId = "BookCellViewId"
+    static let cellHeight: CGFloat = 95.0
+    
+    // MARK: - Outlets
     
     @IBOutlet weak var coverImage: UIImageView!
     @IBOutlet weak var bookTitle: UILabel!
     @IBOutlet weak var bookTags: UILabel!
     @IBOutlet weak var bookAuthors: UILabel!
     
-     var coverData: AsyncData? = nil
+    private var _book: Book?
     
-    // MARK: - Cell Properties
+    private let _nc = NotificationCenter.default
+    private var _bookObserver: NSObjectProtcol?
     
-    static var cellId: String{
-        get{
-            return "BookCellView"
+    func startObserving(book: Book) {
+        _book = book
+        _nc.addObserver(forName: BookCoverImageDidDownload, object: _book, queue: nil) { (n: Notification) in
+            self.syncWithBook()
+        }
+        syncWithBook()
+    }
+    
+    
+    func stopObserving(){
+        if let observer = _bookObserver {
+            _nc.removeObserver(observer)
+            _bookObserver = nil
+            _book = nil
         }
     }
     
-    static var cellHeight: CGFloat {
-        
-        get{
-            return 95.0;
-        }
-        
-    }
-}
-
-
-extension BookViewCell: AsyncDataDelegate {
     
-    func asyncData(_ sender: AsyncData, didEndLoadingFrom url: URL) {
-        UIView.transition(with: coverImage, duration: 0.3, options: [.transitionCurlDown], animations: { 
-            self.coverImage.image = UIImage(data: sender.data)
+    // MARK: - Lifecycle
+    
+    override func prepareForReuse() {
+        stopObserving()
+        syncWithBook()
+    }
+    
+    
+    deinit {
+        stopObserving()
+    }
+    
+    private func syncWithBook(){
+        UIView.transition(with: self.coverImage, duration: 0.7, options: [.transitionCrossDissolve], animations: { 
+            self.coverImage.image = UIImage(data: (self._book?._cover.data)!)
         }, completion: nil)
+        
+        bookTitle.text = _book?.title
+        bookAuthors.text = _book?.formattedListOfAuthors()
+        bookTags.text = _book?.formattedListOfTags()
     }
     
-    // MARK: - Utils
-    
-    func setCoverData(data: AsyncData) {
-        coverData = data
-        coverData!.delegate = self
-        coverImage.image = UIImage(data: coverData!.data)
+    override func awakeFromNib() {
+        super.awakeFromNib()
     }
+    
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+    }
+    
     
 }
+

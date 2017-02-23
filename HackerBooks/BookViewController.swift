@@ -6,6 +6,11 @@
 //  Copyright © 2017 Fran Lucena. All rights reserved.
 //
 
+/*// MARK: - Static Properties
+ 
+ private static let defaultCover = Bundle.main.url(forResource: "Books_Icon", withExtension: "png")!
+*/
+
 import UIKit
 
 class BookViewController: UIViewController {
@@ -15,22 +20,12 @@ class BookViewController: UIViewController {
     @IBOutlet weak var makeBookFavorite: UIBarButtonItem!
     @IBOutlet weak var coverView: UIImageView!
     
-    var model: Book
-    fileprivate var coverData: AsyncData
-    weak var delegate: BookViewControllerDelegate? = nil
-
+    var _model: Book
     
-    // MARK: - Static Properties
-    
-    private static let defaultCover = Bundle.main.url(forResource: "Books_Icon", withExtension: "png")!
-    
-   
-    
-    // MARK: - Model
+    // MARK: - Init
     
     init(model: Book){
-        self.model = model
-        coverData = AsyncData(url: model.coverImageUrl, defaultData: try! Data(contentsOf: BookViewController.defaultCover))
+        self._model = model
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -38,83 +33,73 @@ class BookViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - View Lifecycle
+    // MARK: - Actions
+    
+    @IBAction func readBook(_ sender: UIBarButtonItem) {
+        
+        let pdfVC = PDFViewController(model: _model)
+        navigationController?.pushViewController(pdfVC, animated: true)
+    }
 
+    
+    @IBAction func bookMadeFavorite(_ sender: UIBarButtonItem) {
+       _model.isFavorite = !_model.isFavorite
+    }
+
+    
+    // MARK: - View Sync
+    
+    func syncViewWithModel(book: Book) {
+        coverView.image = UIImage(data: _model._cover.data)
+        title = _model.title
+        if _model.isFavorite {
+            makeBookFavorite.title = "★"
+        }else{
+            makeBookFavorite.title = "☆"
+        }
+    }
+    
+    // MARK: - View Lifecycle
+    
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
         
-        syncViewWithModel()
+        startObserving(book: _model)
+        syncViewWithModel(book: _model)
     }
-    
-       // MARK: - Actions
-    
-    @IBAction func readBook(_ sender: UIBarButtonItem) {
-        
-        let pdfVC = PDFViewController(pdfURL: model.pdfUrl)
-        navigationController?.pushViewController(pdfVC, animated: true)
-        
-        
-    }
-    
-    
-    
-    @IBAction func bookMadeFavorite(_ sender: UIBarButtonItem) {
-        model.toggleFavoriteState()
-        syncFavorites()
-        delegate?.bookChangedFavoriteState(book: model, isFavorite: model.isFavorite)
-        persistFavoritesState()
-        
-    }
-    
-    // MARK: - View Sync
-    
-    func syncViewWithModel() {
-        title = model.title
-        syncBookCover()
-        syncFavorites()
-    }
-    
-    func syncFavorites() {
-        makeBookFavorite.image = model.isFavorite ? UIImage(named: "ic_star.png") : UIImage(named: "ic_star_border.png")
-    }
-    
-    // MARK: - Favorites
-    
-    func persistFavoritesState() {
-        let userDefaults = UserDefaults.standard
-        userDefaults.set(model.isFavorite, forKey: String(model.hashValue))
-    }
-    
-    // MARK: - AsyncData
-    func syncBookCover() {
-        coverData = AsyncData(url: model.coverImageUrl, defaultData: try! Data(contentsOf: BookViewController.defaultCover))
-        coverData.delegate = self
-        coverView.image = UIImage(data: coverData.data)
-    }
-    
-}
 
-// MARK: - Protocols
-
-protocol BookViewControllerDelegate: class {
-    func bookChangedFavoriteState(book: Book, isFavorite: Bool)
-}
-
-
-// MARK: - AsyncData Delegate
-
-extension BookViewController: AsyncDataDelegate {
-    func asyncData(_ sender: AsyncData, didEndLoadingFrom url: URL) {
-        UIView.transition(with: coverView,
-                          duration: 0.3,
-                          options: [.transitionCurlDown],
-                          animations: {
-                            self.coverView.image = UIImage(data: sender.data)},
-                          completion: nil)
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopObserving(book: _model)
+    }
+    
+    // MARK: - Notifications
+    let _nCenter = NotificationCenter.default
+    var bookObserver: NSObjectProtocol?
+    
+    func startObserving(book: Book) {
+        bookObserver = _nCenter.addObserver(forName: BookDidChange, object: book, queue: nil, using: { (n: Notification) in
+            self.syncViewWithModel(book: book)
+        })
+    }
+    
+    func stopObserving(book: Book) {
+        guard let observer = bookObserver else {
+            return
+        }
+        _nCenter.removeObserver(observer)
     }
 }
 
+extension BookViewController: LibraryTableViewControllerDelegate{
+    func libraryTableViewController(_ sender: LibraryTableViewController, didSelectBook book: Book) {
+        stopObserving(book: _model)
+        _model = book
+        startObserving(book: book)
+    }
+}
 
 
 
